@@ -1,0 +1,8 @@
+-cp src
+-cp test/src
+-cp test/lib/rjanicek-mocha.js-haxe-65a7b27/src
+-js test/node/async-test-node.js
+-main MainNode
+--js-modern
+--dead-code-elimination
+-debug

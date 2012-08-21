@@ -1,0 +1,4 @@
+*.js.map
+/test/browser/async-test-browser.js
+/test/node/async-test-node.js
+/test/node/node_modules/*
