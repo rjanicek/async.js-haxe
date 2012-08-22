@@ -39,6 +39,25 @@ class Main {
 			// all functions returned in series or error happened
 		});
 
+		async.auto( {
+			swing_sword: function(ret) {
+				// async code that swings sword
+				ret(null, "schwing");
+			},
+			block_shield: function(ret) {
+				// async code that blocks with shield
+				ret(null, "thud");
+			},
+			battle_done: ["swing_sword", "block_shield", function(ret) {
+				// this function waits for swing_sword and block_shield to complete
+				ret(null, "victory");
+			}]							
+		}, function(err, results) {
+			// handle errors and results for above functions here 
+			// results == { swing_sword: "schwing", block_shield: "thud", battle_done: "victory" }
+		});
+
+
 	}
 }
 ```
