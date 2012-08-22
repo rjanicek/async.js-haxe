@@ -7,7 +7,7 @@ import specs.AsyncSpec;
 using js.mocha.Mocha;
 
 /**
- * ...
+ * async.js-haxe browser tests
  * @author Richard Janicek
  */
 

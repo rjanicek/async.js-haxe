@@ -1,25 +1,23 @@
 package js.async;
 
+/**
+ * async.js bindings
+ * @author Richard Janicek
+ */
 class Async {
 
 	public static var instance : AsyncExtern;
 
-	static function __init__() {
-		if (untyped __js__("!(typeof async === 'undefined')"))
-			instance = untyped __js__("async");
-		else if (untyped __js__("!(typeof require === 'undefined')"))
-			instance = untyped __js__("require('async')");
+	static function __init__() untyped {
+		if (__js__("typeof async !== 'undefined'"))
+			instance = __js__("async");
+		else if (__js__("typeof require !== 'undefined'"))
+			instance = __js__("require('async')");
 		else
 			throw "make sure to include async.js";
 	}
 	
 }
-
-/**
- * Async.js bindings.
- * @author Richard Janicek
- * @see https://github.com/caolan/async
- */
 
 extern class AsyncExtern {
 	
@@ -35,13 +33,13 @@ extern class AsyncExtern {
 	 * parallel there is no guarantee that the iterator functions will complete
 	 * in order.
 	 *
-	 * arr 	An array to iterate over.
+	 * @param arr An array to iterate over.
 	 *
-	 * iterator(item, callback())
+	 * @param iterator(item,callback())
 	 *		A function to apply to each item in the array. The iterator is
 	 *		passed a callback which must be called once it has completed.
 	 *
-	 * cb(err)
+	 * @param cb(err)
 	 *		A callback which is called after all the iterator functions have
 	 *		finished, or an error has occurred.
 	 */
@@ -55,11 +53,11 @@ extern class AsyncExtern {
 	 *
  	 * arr 	An array to iterate over.
  	 *
-	 * iterator(item, callback())
+	 * @param iterator(item,callback())
 	 * 		A function to apply to each item in the array. The iterator is
 	 * 		passed a callback which must be called once it has completed.
 	 *
-	 * cb(err)
+	 * @param cb(err)
 	 * 		A callback which is called after all the iterator functions
 	 * 		have finished, or an error has occurred.
 	 */
@@ -479,7 +477,7 @@ extern class AsyncExtern {
 	 *		An integer for determining how many worker functions should be
 	 *		run in parallel.
 	 */
-	public function queue<T>( worker : T->(Void->Void)->Void, concurrency : Int ) : Queue<T>;
+	public function queue<T>( worker : T->(Dynamic->Dynamic->Void)->Void, concurrency : Int ) : Queue<T>;
 	
 	/**
 	 * Determines the best order for running functions based on their

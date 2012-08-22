@@ -8,7 +8,7 @@ using js.expect.Expect;
 using Std;
 
 /**
- * ...
+ * async.js-haxe tests
  * @author Richard Janicek
  */
 class AsyncSpec {
@@ -480,7 +480,7 @@ class AsyncSpec {
 						
 						var q = async.queue(function(task, ret) { 
 							accumulator += task;
-							ret();
+							ret(null, task);
 						}, 2);
 						
 						var taskDone = false;
@@ -493,34 +493,33 @@ class AsyncSpec {
 						
 						q.push(1, function(err) { taskDone = true; } );
 					});
-					M.it("should process queued array of tasks signaling saturated and empty events", function(done) {
+					M.it("should process queued array of tasks signaling drain and empty events", function(done) {
 						
 						var accumulator = 0;
 						
 						var q = async.queue(function(task, ret) { 
-							trace(task);
 							accumulator += task;
-							ret();
+							ret(null, task);
 						}, 2);
 						
-						var saturated = false;
-						q.saturated = function () {
-							saturated = true;
-						}
-						
 						var empty = false;
-						q.empty = function ():Void {
+						q.empty = function () {
 							empty = true;
 						}
 						
+						var drain = false;
 						q.drain = function () {
-							accumulator.should().equal(3);
-							saturated.should().be.ok();
-							empty.should().be.ok();
-							done();
+							drain = true;
 						};						
 						
 						q.push([1, 1, 1]);
+						
+						Timer.delay(function() { 
+							accumulator.should().equal(3);
+							empty.should().be.ok();
+							drain.should().be.ok();
+							done();
+						}, 250);
 					});
 				});
 				
