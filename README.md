@@ -6,7 +6,7 @@ Haxe bindings for async.js - Async utilities for node and the browser.
 Tested with Haxe 2.10, async.js 0.1.22, node.js 0.8.7, and Chrome.
 
 GitHub -> https://github.com/rjanicek/async.js-haxe<br>
-API Docs ->	https://github.com/rjanicek/async.js-haxe/blob/master/src/js/Async.hx<br>
+API Docs ->	https://github.com/rjanicek/async.js-haxe/blob/master/src/js/async/Async.hx<br>
 Tests -> http://rjanicek.github.com/async.js-haxe<br>
 Richard Janicek -> http://www.janicek.co<br>
 async.js by Caolan McMahon - MIT -> https://github.com/caolan/async<br>
