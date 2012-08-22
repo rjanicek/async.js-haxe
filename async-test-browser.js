@@ -68,8 +68,6 @@ haxe.Timer.prototype = {
 	}
 }
 var js = {}
-js.Async = function() { }
-js.Async.__name__ = true;
 js.Boot = function() { }
 js.Boot.__name__ = true;
 js.Boot.__unhtml = function(s) {
@@ -149,6 +147,9 @@ js.Boot.__string_rec = function(o,s) {
 }
 js.Lib = function() { }
 js.Lib.__name__ = true;
+js.async = {}
+js.async.Async = function() { }
+js.async.Async.__name__ = true;
 js.expect = {}
 js.expect.E = function() { }
 js.expect.E.__name__ = true;
@@ -195,7 +196,7 @@ js.mocha.M.it = function(description,func) {
 }
 var specs = {}
 specs.AsyncSpec = function() {
-	var async = js.Async.instance;
+	var async = js.async.Async.instance;
 	js.mocha.M.describe("Async",function() {
 		js.mocha.M.describe("Collections",function() {
 			js.mocha.M.describe("#forEach()",function() {
@@ -600,7 +601,7 @@ specs.AsyncSpec = function() {
 					var accumulator = 0;
 					var q = async.queue(function(task,ret) {
 						accumulator += task;
-						ret();
+						ret(null,task);
 					},2);
 					var taskDone = false;
 					q.drain = function() {
@@ -612,28 +613,27 @@ specs.AsyncSpec = function() {
 						taskDone = true;
 					});
 				});
-				js.mocha.M.it("should process queued array of tasks signaling saturated and empty events",function(done) {
+				js.mocha.M.it("should process queued array of tasks signaling drain and empty events",function(done) {
 					var accumulator = 0;
 					var q = async.queue(function(task,ret) {
-						haxe.Log.trace(task,{ fileName : "AsyncSpec.hx", lineNumber : 508, className : "specs.AsyncSpec", methodName : "new"});
 						accumulator += task;
-						ret();
+						ret(null,task);
 					},2);
-					var saturated = false;
-					q.saturated = function() {
-						saturated = true;
-					};
 					var empty = false;
 					q.empty = function() {
 						empty = true;
 					};
+					var drain = false;
 					q.drain = function() {
-						js.expect.E.should(accumulator).equal(3);
-						js.expect.E.should(saturated).be.ok();
-						js.expect.E.should(empty).be.ok();
-						done();
+						drain = true;
 					};
 					q.push([1,1,1]);
+					specs.Timer.delay(function() {
+						js.expect.E.should(accumulator).equal(3);
+						js.expect.E.should(empty).be.ok();
+						js.expect.E.should(drain).be.ok();
+						done();
+					},250);
 				});
 			});
 			js.mocha.M.describe("#auto()",function() {
@@ -762,7 +762,6 @@ specs.Timer.stamp = function() {
 String.__name__ = true;
 Array.__name__ = true;
 Date.__name__ = ["Date"];
-if(!(typeof async === 'undefined')) js.Async.instance = async; else if(!(typeof require === 'undefined')) js.Async.instance = require('async'); else throw "make sure to include async.js";
 if(typeof document != "undefined") js.Lib.document = document;
 if(typeof window != "undefined") {
 	js.Lib.window = window;
@@ -772,6 +771,7 @@ if(typeof window != "undefined") {
 		return f(msg,[url + ":" + line]);
 	};
 }
+if(typeof async !== 'undefined') js.async.Async.instance = async; else if(typeof require !== 'undefined') js.async.Async.instance = require('async'); else throw "make sure to include async.js";
 if(!(typeof expect === 'undefined')) js.expect.E._expect = expect; else if(!(typeof require === 'undefined')) js.expect.E._expect = require('expect.js'); else throw "make sure to include expect.js";
 MainBrowser.main();
 })();
