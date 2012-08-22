@@ -22,15 +22,15 @@ import js.Async;
 
 class Main {
 	public function new() {
-		
-		Async.parallel([
+		var async = Async.instance;
+		async.parallel([
 			function (ret) { /* get data from server */	},
 			function (ret) { /* get data from server */	}
 		], function(error, results) {
 			// all functions returned in parallel or error happened
 		});
 		
-		Async.series([
+		async.series([
 			function (ret) { /* get data from server */	},
 			function (ret) { /* get data from server */	}
 		], function(error, results) {
