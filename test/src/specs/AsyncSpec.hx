@@ -1,6 +1,6 @@
 package specs;
 
-import js.Async;
+import js.async.Async;
 import js.expect.Expect;
 import js.mocha.Mocha;
 
@@ -14,7 +14,9 @@ using Std;
 class AsyncSpec {
 
 	public function new() {
+		
 		var async = Async.instance;
+		
 		M.describe("Async", function() {
 			
 			M.describe("Collections", function() {

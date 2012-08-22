@@ -18,11 +18,13 @@ async.js by Caolan McMahon - MIT -> https://github.com/caolan/async<br>
 
 ###Haxe
 ```haxe
-import js.Async;
+import js.async.Async;
 
 class Main {
 	public function new() {
+		
 		var async = Async.instance;
+		
 		async.parallel([
 			function (ret) { /* get data from server */	},
 			function (ret) { /* get data from server */	}
